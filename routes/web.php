@@ -8,3 +8,4 @@ Route::get('/', function () {
 });
 
 Route::get('/webshop', [WebshopController::class, 'list'])->name('webshop.list');
+Route::get('/webshop/{id}', [WebshopController::class, 'detail'])->name('webshop.detail');

@@ -7,4 +7,9 @@ class WebshopController extends Controller
     {
         return view('webshop.list');
     }
+
+    public function detail($id)
+    {
+        return view('webshop.detail', ['id' => $id]);
+    }
 }
