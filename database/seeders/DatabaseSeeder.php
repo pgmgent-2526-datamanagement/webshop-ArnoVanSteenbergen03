@@ -13,16 +13,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create test users
+        User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
+            'name' => 'Test',
+            'last_name' => 'User',
             'email' => 'test@example.com',
         ]);
 
         // Create an admin user for Filament
         $this->call([
             \Database\Seeders\AdminUserSeeder::class,
+        ]);
+
+        // Seed all tables in correct order
+        $this->call([
+            \Database\Seeders\CategorySeeder::class,
+            \Database\Seeders\TagSeeder::class,
+            \Database\Seeders\ProductSeeder::class,
         ]);
     }
 }
