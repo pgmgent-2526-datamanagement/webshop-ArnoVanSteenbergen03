@@ -2,7 +2,63 @@
 	<div class="w-full max-w-7xl mx-auto px-4">
 		<h1 class="text-4xl font-bold text-blue-300 mb-6">LEGO Resale Shop</h1>
 
-		<x-searchform buttontext="Filter"></x-searchform>
+		<x-searchform buttontext="Filter" :categories="$categories" :tags="$tags"></x-searchform>
+
+		@if(request()->hasAny(['search', 'category', 'tag', 'condition', 'min_price', 'max_price', 'in_stock']))
+			<div class="mb-6 bg-blue-100 border border-blue-300 rounded-lg p-4">
+				<div class="flex items-center justify-between flex-wrap gap-2">
+					<div class="flex items-center flex-wrap gap-2">
+						<span class="font-semibold text-blue-800">Active Filters:</span>
+						
+						@if(request('search'))
+							<span class="px-3 py-1 bg-blue-500 text-white rounded-full text-sm">
+								Search: "{{ request('search') }}"
+							</span>
+						@endif
+
+						@if(request('category'))
+							<span class="px-3 py-1 bg-blue-500 text-white rounded-full text-sm">
+								Category: {{ $categories->find(request('category'))->name ?? 'Unknown' }}
+							</span>
+						@endif
+
+						@if(request('tag'))
+							<span class="px-3 py-1 bg-blue-500 text-white rounded-full text-sm">
+								Tag: {{ $tags->find(request('tag'))->name ?? 'Unknown' }}
+							</span>
+						@endif
+
+						@if(request('condition'))
+							<span class="px-3 py-1 bg-blue-500 text-white rounded-full text-sm">
+								Condition: {{ ucfirst(request('condition')) }}
+							</span>
+						@endif
+
+						@if(request('min_price'))
+							<span class="px-3 py-1 bg-blue-500 text-white rounded-full text-sm">
+								Min: €{{ request('min_price') }}
+							</span>
+						@endif
+
+						@if(request('max_price'))
+							<span class="px-3 py-1 bg-blue-500 text-white rounded-full text-sm">
+								Max: €{{ request('max_price') }}
+							</span>
+						@endif
+
+						@if(request('in_stock'))
+							<span class="px-3 py-1 bg-blue-500 text-white rounded-full text-sm">
+								In Stock Only
+							</span>
+						@endif
+					</div>
+					
+					<a href="{{ route('webshop.list') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">
+						Clear All
+					</a>
+				</div>
+			</div>
+		@endif
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 			@forelse($products as $product)
