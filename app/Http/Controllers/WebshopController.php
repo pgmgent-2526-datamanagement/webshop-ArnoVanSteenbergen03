@@ -7,7 +7,7 @@ class WebshopController extends Controller
 {
     public function list()
     {
-        $products = Product::with(['category', 'tags'])->get();
+        $products = Product::with(['category', 'tags'])->paginate(5);
         
         return view('webshop.list', compact('products'));
     }

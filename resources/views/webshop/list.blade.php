@@ -93,6 +93,10 @@
                 </div>
             @endforelse
 		</div>
+
+		<div class="mt-8 flex justify-center">
+			{{ $products->links() }}
+		</div>
 	</div>
 
 	<style>
