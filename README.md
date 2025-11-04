@@ -1,3 +1,13 @@
+ddev start (enkel voor db)
+php artisan serve (voor webserver)
+
+DB_CONNECTION="mariadb"
+DB_HOST="localhost"
+DB_PORT="8008"
+DB_DATABASE="db"
+DB_USERNAME="db"
+DB_PASSWORD="db"
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

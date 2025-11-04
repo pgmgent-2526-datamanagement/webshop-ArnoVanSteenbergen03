@@ -16,6 +16,9 @@ web_environment: []
 corepack_enable: false
 default_container_timeout: "240"
 
+host_db_port: "8008"
+
+
 # Key features of DDEV's config.yaml:
 
 # name: <projectname> # Name of the project, automatically provides
