@@ -14,7 +14,7 @@
 			</div>
 			<button
 				type="submit" 
-				class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg border-2 border-white/30 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-white/60 hover:from-blue-600 hover:to-purple-700 whitespace-nowrap"
+				class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg border-2 border-white/30 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-white/60 hover:from-blue-600 hover:to-purple-700 whitespace-nowrap"
 			>
 				{{ $buttonText ?? 'Search' }}
 			</button>

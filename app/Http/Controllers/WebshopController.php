@@ -51,7 +51,7 @@ class WebshopController extends Controller
             $query->orderBy($sortBy, $sortOrder);
         }
 
-        $products = $query->paginate(12)->withQueryString();
+        $products = $query->paginate(6)->withQueryString();
         
         $categories = Category::all();
         $tags = Tag::all();

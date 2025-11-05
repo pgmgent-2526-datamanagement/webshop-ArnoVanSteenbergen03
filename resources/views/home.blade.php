@@ -7,7 +7,7 @@
 			<p class="text-xl text-blue-200 mb-6">
 				Discover our amazing products and enjoy a seamless shopping experience.
 			</p>
-			<a href="/webshop" class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 text-blue-500 font-semibold px-8 py-3 rounded-lg shadow-lg border-2 border-white/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-white/60 hover:from-blue-600 hover:to-purple-700">
+			<a href="/webshop" class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg border-2 border-white/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-white/60 hover:from-blue-600 hover:to-purple-700">
 				Start Shopping
 			</a>
 		</div>
