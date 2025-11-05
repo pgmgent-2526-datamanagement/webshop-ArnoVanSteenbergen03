@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Mail\OrderConfirmation;
+use App\Mail\AdminOrderNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Mollie\Api\MollieApiClient;
 
 class ShoppingCartController extends Controller
@@ -166,14 +169,13 @@ class ShoppingCartController extends Controller
         $mollie = new MollieApiClient();
         $mollie->setApiKey(config('services.mollie.key'));
         
-        $payment = $mollie->payments->create([
+        $paymentData = [
             'amount' => [
                 'currency' => 'EUR',
                 'value' => number_format($total, 2, '.', ''),
             ],
             'description' => 'Order #' . $order->id,
             'redirectUrl' => route('cart.checkout.success') . '?order_id=' . $order->id,
-            'webhookUrl' => route('webhooks.mollie'),
             'metadata' => [
                 'order_id' => $order->id,
                 'customer_name' => $validated['name'],
@@ -182,7 +184,14 @@ class ShoppingCartController extends Controller
                 'customer_city' => $validated['city'],
                 'customer_zipcode' => $validated['zipcode'],
             ],
-        ]);
+        ];
+
+        // Only add webhook URL in production (when using a public URL)
+        if (!app()->environment('local')) {
+            $paymentData['webhookUrl'] = route('webhooks.mollie');
+        }
+        
+        $payment = $mollie->payments->create($paymentData);
 
         // Update order with payment info
         $order->update([
@@ -214,8 +223,30 @@ class ShoppingCartController extends Controller
                 'payment_method' => $payment->method ?? null,
             ]);
 
-            if ($payment->isPaid()) {
+            if ($payment->isPaid() && $order->status !== 'paid') {
                 $order->update(['status' => 'paid']);
+                
+                // Get customer data from payment metadata
+                $metadata = $payment->metadata;
+                $customerData = [
+                    'name' => $metadata->customer_name,
+                    'email' => $metadata->customer_email,
+                    'address' => $metadata->customer_address,
+                    'city' => $metadata->customer_city,
+                    'zipcode' => $metadata->customer_zipcode,
+                ];
+                
+                // Send emails (in case webhook didn't fire in development)
+                try {
+                    Mail::to($customerData['email'])
+                        ->send(new OrderConfirmation($order, $customerData));
+                    
+                    Mail::to(env('ADMIN_EMAIL', 'admin@example.com'))
+                        ->send(new AdminOrderNotification($order, $customerData));
+                } catch (\Exception $e) {
+                    // Log error but don't break the success page
+                    \Log::error('Failed to send order emails: ' . $e->getMessage());
+                }
             }
         }
 
@@ -250,7 +281,27 @@ class ShoppingCartController extends Controller
             if ($payment->isPaid()) {
                 $order->update(['status' => 'paid']);
                 
-                // TODO: Send confirmation email here
+                // Load order relationships for email
+                $order->load('orderItems.product');
+                
+                // Get customer data from payment metadata
+                $metadata = $payment->metadata;
+                $customerData = [
+                    'name' => $metadata->customer_name,
+                    'email' => $metadata->customer_email,
+                    'address' => $metadata->customer_address,
+                    'city' => $metadata->customer_city,
+                    'zipcode' => $metadata->customer_zipcode,
+                ];
+                
+                // Send confirmation email to customer
+                Mail::to($customerData['email'])
+                    ->send(new OrderConfirmation($order, $customerData));
+                
+                // Send notification email to admin
+                Mail::to(env('ADMIN_EMAIL', 'admin@example.com'))
+                    ->send(new AdminOrderNotification($order, $customerData));
+                    
             } elseif ($payment->isFailed() || $payment->isExpired() || $payment->isCanceled()) {
                 $order->update(['status' => 'cancelled']);
             }
