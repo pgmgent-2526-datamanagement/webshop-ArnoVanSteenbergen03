@@ -44,8 +44,7 @@
                             <div class="flex flex-col items-end justify-between">
                                 <form action="{{ route('cart.remove', $item['product']->id) }}" method="POST">
                                     @csrf
-                                                                        @method
-                                    ('DELETE')
+                                    @method('DELETE')
                                     <button type="submit" class="text-red-500 hover:text-red-700 transition-colors">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -108,9 +107,9 @@
                             </div>
                         </div>
 
-                        <button class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 rounded-lg border-2 border-white/30 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-white/60 mb-3">
+                        <a href="{{ route('cart.checkout') }}" class="block w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 rounded-lg border-2 border-white/30 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-white/60 mb-3 text-center">
                             Proceed to Checkout
-                        </button>
+                        </a>
 
                         <a href="{{ route('webshop.list') }}" class="block text-center text-blue-200 hover:text-blue-100 transition-colors">
                             Continue Shopping
