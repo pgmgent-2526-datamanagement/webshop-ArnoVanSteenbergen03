@@ -24,7 +24,6 @@
 						{{ config('app.name', 'Webshop AVSWorks') }}
 					</div>
 
-					{{-- Mobile menu button --}}
 					<button type="button" class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" id="mobile-menu-button">
 						<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="menu-icon">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -34,7 +33,6 @@
 						</svg>
 					</button>
 
-					{{-- Desktop navigation --}}
 					<nav class="hidden md:block">
 						<ul class="flex gap-6">
 							<li>
@@ -68,7 +66,6 @@
 					</nav>
 				</div>
 
-				{{-- Mobile navigation menu --}}
 				<div class="md:hidden hidden pb-4" id="mobile-menu">
 					<ul class="space-y-2">
 						<li>
@@ -101,7 +98,6 @@
 		</header>
 
 		<script>
-			// Mobile menu toggle
 			document.addEventListener('DOMContentLoaded', function() {
 				const menuButton = document.getElementById('mobile-menu-button');
 				const mobileMenu = document.getElementById('mobile-menu');
@@ -125,7 +121,7 @@
 		<footer class="bg-white/95 backdrop-blur-lg shadow-lg mt-auto">
 			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 				<p class="text-center text-slate-600">&copy;{{ date('Y') }}
-					{{ config('app.name', 'Laravel') }}
+					{{ __('AVSWorks') }}
 				. All rights reserved.
 			</p>
 		</div>

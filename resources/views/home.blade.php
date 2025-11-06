@@ -1,24 +1,20 @@
 <x-layout>
 	<x-slot:seo>
-		<x-seo 
-			title="Home"
-			description="Welcome to our LEGO resale webshop. Discover high-quality LEGO sets at competitive prices with a seamless shopping experience."
-			:schema="[
-				'@context' => 'https://schema.org',
-				'@type' => 'WebSite',
-				'name' => config('app.name'),
-				'url' => url('/'),
-				'description' => 'LEGO resale webshop offering quality LEGO sets',
-				'potentialAction' => [
-					'@type' => 'SearchAction',
-					'target' => [
-						'@type' => 'EntryPoint',
-						'urlTemplate' => url('/webshop') . '?search={search_term_string}'
-					],
-					'query-input' => 'required name=search_term_string'
-				]
-			]"
-		/>
+		<x-seo title="Home" description="Welcome to our LEGO resale webshop. Discover high-quality LEGO sets at competitive prices with a seamless shopping experience." :schema="[
+		'@context' => 'https://schema.org',
+		'@type' => 'WebSite',
+		'name' => config('app.name'),
+		'url' => url('/'),
+		'description' => 'LEGO resale webshop offering quality LEGO sets',
+		'potentialAction' => [
+			'@type' => 'SearchAction',
+			'target' => [
+				'@type' => 'EntryPoint',
+				'urlTemplate' => url('/webshop') . '?search={search_term_string}'
+			],
+			'query-input' => 'required name=search_term_string'
+		]
+	]"/>
 	</x-slot:seo>
 	<div class="space-y-8">
 		<div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 md:p-12">
@@ -42,7 +38,10 @@
 					About Us
 				</h2>
 				<p class="text-blue-100 leading-relaxed">
-					This is our lego resale webshop made with Laravel and PHP 8. We offer a wide selection of high-quality LEGO sets at competitive prices.
+					Hello! I&apos;m Arno, a junior developer currently studying at
+					Arteveldehogeschool. <br /> I created this webshop as part of my datamanagement course exam project.
+					Here I learned PHP for the first time, we also learned how to use Artisan and Laravel. <br />
+					I learned a lot in this project and i was also excited to learn PHP for the first time, so this project was very fun to make for me.
 				</p>
 			</div>
 
@@ -54,9 +53,16 @@
 					Project Info
 				</h2>
 				<p class="text-blue-100 leading-relaxed">
-					This is my exam project for my datamanagement course at Arteveldehogeschool, showcasing modern web development practices.
+					- Framework: Laravel 12 <br />
+					- PHP: 8.2+ <br />
+					- Database: MariaDB <br />
+					- Admin Panel: Filament 4.0 <br />
+					- Payment: Mollie API <br />
+					- Frontend: Tailwind CSS, Vite <br />
+					- Development Environment: DDEV
 				</p>
 			</div>
 		</div>
 	</div>
 </x-layout>
+
