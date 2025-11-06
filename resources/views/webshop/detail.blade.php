@@ -43,7 +43,7 @@
 		/>
 	</x-slot:seo>
 	<div class="container mx-auto px-4 py-8 max-w-7xl">
-		<a href="{{ route('webshop.list') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6 transition-colors">
+		<a href="{{ route('webshop.list') }}" class="inline-flex items-center text-blue-300 hover:text-blue-100 mb-6 transition-colors">
 			<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
 			</svg>
@@ -62,11 +62,11 @@
 
 			<div class="flex flex-col">
 				<p
-					class="text-sm text-gray-500 uppercase tracking-wide mb-2">{{ $product->category->name }}
+					class="text-sm text-blue-300 uppercase tracking-wide mb-2">{{ $product->category->name }}
 				</p>
 
 				<h1
-					class="text-4xl font-bold text-gray-900 mb-4">{{ $product->name }}
+					class="text-4xl font-bold text-white mb-4">{{ $product->name }}
 				</h1>
 
 				<div class="flex flex-wrap gap-2 mb-6">
@@ -93,57 +93,57 @@
 				</div>
 
 				<div class="mb-6">
-					<h2 class="text-lg font-semibold text-gray-900 mb-2">Description</h2>
+					<h2 class="text-lg font-semibold text-white mb-2">Description</h2>
 					<p
-						class="text-gray-700 leading-relaxed">{{ $product->description }}
+						class="text-blue-100 leading-relaxed">{{ $product->description }}
 					</p>
 				</div>
 
 				@if($product->tags->count() > 0)
 					<div class="mb-6">
-						<h2 class="text-lg font-semibold text-gray-900 mb-3">Tags</h2>
+						<h2 class="text-lg font-semibold text-white mb-3">Tags</h2>
 						<div class="flex flex-wrap gap-2">
 							@foreach($product->tags as $tag)
 								<span
-									class="inline-flex items-center px-3 py-1 rounded-lg text-sm font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors">{{ $tag->name }}
+									class="inline-flex items-center px-3 py-1 rounded-lg text-sm font-medium bg-white/20 text-white hover:bg-white/30 transition-colors">{{ $tag->name }}
 								</span>
 							@endforeach
 						</div>
 					</div>
 				@endif
 
-				<div class="bg-gray-50 rounded-lg p-6 space-y-4">
-					<h2 class="text-xl font-bold text-gray-900 mb-4">Product Details</h2>
+				<div class="bg-white/10 backdrop-blur-lg rounded-lg p-6 space-y-4">
+					<h2 class="text-xl font-bold text-white mb-4">Product Details</h2>
 
 					@if($product->piece_count)
-						<div class="flex justify-between items-center border-b border-gray-200 pb-3">
-							<span class="text-gray-600 font-medium">🧱 Piece Count</span>
+						<div class="flex justify-between items-center border-b border-white/20 pb-3">
+							<span class="text-blue-200 font-medium">🧱 Piece Count</span>
 							<span
-								class="text-gray-900 font-semibold">
+								class="text-white font-semibold">
 								{{ number_format($product->piece_count) }}
 								pieces</span>
 						</div>
 					@endif
 
 					@if($product->release_date)
-						<div class="flex justify-between items-center border-b border-gray-200 pb-3">
-							<span class="text-gray-600 font-medium">📅 Release Date</span>
-							<span class="text-gray-900 font-semibold">{{ $product->release_date->format('F Y') }}</span>
+						<div class="flex justify-between items-center border-b border-white/20 pb-3">
+							<span class="text-blue-200 font-medium">📅 Release Date</span>
+							<span class="text-white font-semibold">{{ $product->release_date->format('F Y') }}</span>
 						</div>
 					@endif
 
-					<div class="flex justify-between items-center border-b border-gray-200 pb-3">
-						<span class="text-gray-600 font-medium">🏷️ Condition</span>
-						<span class="text-gray-900 font-semibold capitalize">{{ $product->condition }}</span>
+					<div class="flex justify-between items-center border-b border-white/20 pb-3">
+						<span class="text-blue-200 font-medium">🏷️ Condition</span>
+						<span class="text-white font-semibold capitalize">{{ $product->condition }}</span>
 					</div>
 
 					<div class="flex justify-between items-center">
-						<span class="text-gray-600 font-medium">📦 Availability</span>
-						<span class="text-gray-900 font-semibold">@if($product->stock > 0)
+						<span class="text-blue-200 font-medium">📦 Availability</span>
+						<span class="text-white font-semibold">@if($product->stock > 0)
 							{{ $product->stock }}
 							unit(s) in stock
 						@else
-															<span class="text-red-600"> Out of stock</span>
+															<span class="text-red-400"> Out of stock</span>
 														@endif
 						</span>
 					</div>
