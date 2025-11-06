@@ -95,7 +95,7 @@ class ShoppingCartController extends Controller
     public function checkout()
     {
         $cart = session()->get('cart', []);
-        
+
         if (empty($cart)) {
             return redirect()->route('cart.show')->with('error', 'Your cart is empty!');
         }
@@ -130,12 +130,11 @@ class ShoppingCartController extends Controller
         ]);
 
         $cart = session()->get('cart', []);
-        
+
         if (empty($cart)) {
             return redirect()->route('cart.show')->with('error', 'Your cart is empty!');
         }
 
-        // Calculate total
         $total = 0;
         foreach ($cart as $productId => $quantity) {
             $product = Product::find($productId);
@@ -144,15 +143,13 @@ class ShoppingCartController extends Controller
             }
         }
 
-        // Create order
         $order = Order::create([
-            'user_id' => null, // Or auth()->id() if you have authentication
+            'user_id' => null,
             'total_price' => $total,
             'status' => 'pending',
             'payment_status' => 'pending',
         ]);
 
-        // Create order items
         foreach ($cart as $productId => $quantity) {
             $product = Product::find($productId);
             if ($product) {
@@ -165,10 +162,9 @@ class ShoppingCartController extends Controller
             }
         }
 
-        // Create Mollie payment
         $mollie = new MollieApiClient();
         $mollie->setApiKey(config('services.mollie.key'));
-        
+
         $paymentData = [
             'amount' => [
                 'currency' => 'EUR',
@@ -186,23 +182,19 @@ class ShoppingCartController extends Controller
             ],
         ];
 
-        // Only add webhook URL in production (when using a public URL)
         if (!app()->environment('local')) {
             $paymentData['webhookUrl'] = route('webhooks.mollie');
         }
-        
+
         $payment = $mollie->payments->create($paymentData);
 
-        // Update order with payment info
         $order->update([
             'payment_id' => $payment->id,
             'payment_status' => $payment->status,
         ]);
 
-        // Clear cart
         session()->forget('cart');
 
-        // Redirect to Mollie payment page
         return redirect($payment->getCheckoutUrl());
     }
 
@@ -211,13 +203,12 @@ class ShoppingCartController extends Controller
         $orderId = $request->query('order_id');
         $order = Order::with('orderItems.product')->findOrFail($orderId);
 
-        // Check payment status
         if ($order->payment_id) {
             $mollie = new MollieApiClient();
             $mollie->setApiKey(config('services.mollie.key'));
-            
+
             $payment = $mollie->payments->get($order->payment_id);
-            
+
             $order->update([
                 'payment_status' => $payment->status,
                 'payment_method' => $payment->method ?? null,
@@ -225,8 +216,7 @@ class ShoppingCartController extends Controller
 
             if ($payment->isPaid() && $order->status !== 'paid') {
                 $order->update(['status' => 'paid']);
-                
-                // Get customer data from payment metadata
+
                 $metadata = $payment->metadata;
                 $customerData = [
                     'name' => $metadata->customer_name,
@@ -235,16 +225,14 @@ class ShoppingCartController extends Controller
                     'city' => $metadata->customer_city,
                     'zipcode' => $metadata->customer_zipcode,
                 ];
-                
-                // Send emails (in case webhook didn't fire in development)
+
                 try {
                     Mail::to($customerData['email'])
                         ->send(new OrderConfirmation($order, $customerData));
-                    
+
                     Mail::to(env('ADMIN_EMAIL', 'admin@example.com'))
                         ->send(new AdminOrderNotification($order, $customerData));
                 } catch (\Exception $e) {
-                    // Log error but don't break the success page
                     \Log::error('Failed to send order emails: ' . $e->getMessage());
                 }
             }
@@ -261,14 +249,14 @@ class ShoppingCartController extends Controller
     public function webhook(Request $request)
     {
         $paymentId = $request->input('id');
-        
+
         if (!$paymentId) {
             return response()->json(['error' => 'No payment ID provided'], 400);
         }
 
         $mollie = new MollieApiClient();
         $mollie->setApiKey(config('services.mollie.key'));
-        
+
         $payment = $mollie->payments->get($paymentId);
         $order = Order::where('payment_id', $paymentId)->first();
 
@@ -280,11 +268,9 @@ class ShoppingCartController extends Controller
 
             if ($payment->isPaid()) {
                 $order->update(['status' => 'paid']);
-                
-                // Load order relationships for email
+
                 $order->load('orderItems.product');
-                
-                // Get customer data from payment metadata
+
                 $metadata = $payment->metadata;
                 $customerData = [
                     'name' => $metadata->customer_name,
@@ -293,15 +279,13 @@ class ShoppingCartController extends Controller
                     'city' => $metadata->customer_city,
                     'zipcode' => $metadata->customer_zipcode,
                 ];
-                
-                // Send confirmation email to customer
+
                 Mail::to($customerData['email'])
                     ->send(new OrderConfirmation($order, $customerData));
-                
-                // Send notification email to admin
+
                 Mail::to(env('ADMIN_EMAIL', 'admin@example.com'))
                     ->send(new AdminOrderNotification($order, $customerData));
-                    
+
             } elseif ($payment->isFailed() || $payment->isExpired() || $payment->isCanceled()) {
                 $order->update(['status' => 'cancelled']);
             }

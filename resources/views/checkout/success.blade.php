@@ -1,4 +1,10 @@
 <x-layout>
+    <x-slot:seo>
+        <x-seo 
+            title="Order Confirmation"
+            description="Thank you for your order. Your order has been received and is being processed."
+        />
+    </x-slot:seo>
     <div class="max-w-4xl mx-auto px-4 py-8">
         <div class="bg-white/10 backdrop-blur-sm rounded-lg p-8 text-center">
             @if($order->payment_status === 'paid')

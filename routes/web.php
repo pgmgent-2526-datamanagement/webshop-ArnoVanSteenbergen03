@@ -2,11 +2,29 @@
 
 use App\Http\Controllers\WebshopController;
 use App\Http\Controllers\ShoppingCartController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
 });
+
+// sitemap route
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+
+// robots 
+Route::get('/robots.txt', function () {
+    $robots = "User-agent: *\n";
+    $robots .= "Allow: /\n";
+    $robots .= "Disallow: /admin\n";
+    $robots .= "Disallow: /cart\n";
+    $robots .= "Disallow: /checkout\n";
+    $robots .= "Disallow: /webhooks\n\n";
+    $robots .= "Sitemap: " . url('/sitemap.xml');
+
+    return response($robots, 200)
+        ->header('Content-Type', 'text/plain');
+})->name('robots');
 
 // webshop routes
 Route::get('/webshop', [WebshopController::class, 'list'])->name('webshop.list');

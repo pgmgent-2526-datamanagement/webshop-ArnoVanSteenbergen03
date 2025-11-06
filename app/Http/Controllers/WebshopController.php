@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Http\Controllers;
 
 use App\Models\Product;
@@ -14,9 +14,9 @@ class WebshopController extends Controller
 
         if ($request->filled('search')) {
             $searchTerm = $request->search;
-            $query->where(function($q) use ($searchTerm) {
+            $query->where(function ($q) use ($searchTerm) {
                 $q->where('name', 'like', "%{$searchTerm}%")
-                  ->orWhere('description', 'like', "%{$searchTerm}%");
+                    ->orWhere('description', 'like', "%{$searchTerm}%");
             });
         }
 
@@ -25,7 +25,7 @@ class WebshopController extends Controller
         }
 
         if ($request->filled('tag')) {
-            $query->whereHas('tags', function($q) use ($request) {
+            $query->whereHas('tags', function ($q) use ($request) {
                 $q->where('tags.id', $request->tag);
             });
         }
@@ -46,23 +46,23 @@ class WebshopController extends Controller
 
         $sortBy = $request->get('sort_by', 'created_at');
         $sortOrder = $request->get('sort_order', 'desc');
-        
+
         if (in_array($sortBy, ['price', 'name', 'created_at', 'stock'])) {
             $query->orderBy($sortBy, $sortOrder);
         }
 
         $products = $query->paginate(6)->withQueryString();
-        
+
         $categories = Category::all();
         $tags = Tag::all();
-        
+
         return view('webshop.list', compact('products', 'categories', 'tags'));
     }
 
     public function detail($id)
     {
         $product = Product::with(['category', 'tags'])->findOrFail($id);
-        
+
         return view('webshop.detail', compact('product'));
     }
 }

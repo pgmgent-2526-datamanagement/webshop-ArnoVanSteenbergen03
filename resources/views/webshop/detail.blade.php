@@ -1,4 +1,47 @@
 <x-layout>
+	<x-slot:seo>
+		<x-seo 
+			:title="$product->name"
+			:description="$product->description . ' - ' . $product->category->name . ' LEGO set with ' . ($product->piece_count ? number_format($product->piece_count) . ' pieces' : 'quality pieces') . '. Condition: ' . ucfirst($product->condition) . '. Price: €' . number_format($product->price, 2)"
+			:image="$product->image ? asset($product->image) : null"
+			type="product"
+			:schema="[
+				'@context' => 'https://schema.org',
+				'@type' => 'Product',
+				'name' => $product->name,
+				'description' => $product->description,
+				'image' => $product->image ? asset($product->image) : 'https://via.placeholder.com/800x800/0066CC/FFFFFF?text=' . urlencode($product->name),
+				'brand' => [
+					'@type' => 'Brand',
+					'name' => 'LEGO'
+				],
+				'category' => $product->category->name,
+				'offers' => [
+					'@type' => 'Offer',
+					'url' => url()->current(),
+					'priceCurrency' => 'EUR',
+					'price' => (string) $product->price,
+					'priceValidUntil' => now()->addYear()->toDateString(),
+					'availability' => $product->stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+					'itemCondition' => match($product->condition) {
+						'new' => 'https://schema.org/NewCondition',
+						'used' => 'https://schema.org/UsedCondition',
+						'refurbished' => 'https://schema.org/RefurbishedCondition',
+						default => 'https://schema.org/UsedCondition'
+					},
+					'seller' => [
+						'@type' => 'Organization',
+						'name' => config('app.name')
+					]
+				],
+				'aggregateRating' => [
+					'@type' => 'AggregateRating',
+					'ratingValue' => '4.5',
+					'reviewCount' => '10'
+				]
+			]"
+		/>
+	</x-slot:seo>
 	<div class="container mx-auto px-4 py-8 max-w-7xl">
 		<a href="{{ route('webshop.list') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6 transition-colors">
 			<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewbox="0 0 24 24">

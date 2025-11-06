@@ -1,4 +1,25 @@
 <x-layout>
+	<x-slot:seo>
+		<x-seo 
+			title="Home"
+			description="Welcome to our LEGO resale webshop. Discover high-quality LEGO sets at competitive prices with a seamless shopping experience."
+			:schema="[
+				'@context' => 'https://schema.org',
+				'@type' => 'WebSite',
+				'name' => config('app.name'),
+				'url' => url('/'),
+				'description' => 'LEGO resale webshop offering quality LEGO sets',
+				'potentialAction' => [
+					'@type' => 'SearchAction',
+					'target' => [
+						'@type' => 'EntryPoint',
+						'urlTemplate' => url('/webshop') . '?search={search_term_string}'
+					],
+					'query-input' => 'required name=search_term_string'
+				]
+			]"
+		/>
+	</x-slot:seo>
 	<div class="space-y-8">
 		<div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 md:p-12">
 			<h1 class="text-4xl md:text-5xl font-bold text-blue-300 mb-4 animate-fade-in">

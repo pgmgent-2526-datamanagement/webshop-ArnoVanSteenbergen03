@@ -1,4 +1,34 @@
 <x-layout>
+	<x-slot:seo>
+		<x-seo 
+			title="LEGO Resale Shop - Browse All Products"
+			description="Browse our extensive collection of LEGO sets. Find the perfect LEGO set from various categories and conditions at competitive prices."
+			:schema="[
+				'@context' => 'https://schema.org',
+				'@type' => 'CollectionPage',
+				'name' => 'LEGO Products',
+				'description' => 'Browse our collection of LEGO sets',
+				'url' => url()->current(),
+				'breadcrumb' => [
+					'@type' => 'BreadcrumbList',
+					'itemListElement' => [
+						[
+							'@type' => 'ListItem',
+							'position' => 1,
+							'name' => 'Home',
+							'item' => url('/')
+						],
+						[
+							'@type' => 'ListItem',
+							'position' => 2,
+							'name' => 'Products',
+							'item' => url()->current()
+						]
+					]
+				]
+			]"
+		/>
+	</x-slot:seo>
 	<div class="w-full max-w-7xl mx-auto px-4">
 		<h1 class="text-4xl font-bold text-blue-300 mb-6">LEGO Resale Shop</h1>
 
