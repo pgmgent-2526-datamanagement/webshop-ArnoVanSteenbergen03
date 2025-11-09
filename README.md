@@ -92,6 +92,41 @@ A Laravel-based e-commerce webshop application with an admin panel powered by Fi
 - `resources/views/`: Blade templates
 - `routes/web.php`: Web routes
 
+## Deployment to Shared Hosting
+
+This project can be deployed to shared hosting environments (like EasyHosting) using FTP clients (like FileZilla).
+
+### Quick Start for Deployment
+
+1. **Prepare your application**:
+   ```bash
+   ./prepare-deployment.sh
+   ```
+   This script will install dependencies, optimize Laravel, and prepare your files for upload.
+
+2. **Read the deployment guide**:
+   - See [DEPLOYMENT.md](DEPLOYMENT.md) for complete step-by-step instructions
+   - Use [DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md) to track your progress
+
+3. **Common deployment issues**:
+   - See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for solutions to common problems
+
+### Key Files for Deployment
+
+- **DEPLOYMENT.md**: Complete guide for deploying to shared hosting via FTP
+- **DEPLOYMENT_CHECKLIST.md**: Step-by-step checklist to track deployment progress
+- **TROUBLESHOOTING.md**: Solutions for common deployment issues
+- **prepare-deployment.sh**: Script to prepare application for deployment
+- **public/index.shared-hosting.php**: Modified index.php for shared hosting environments
+
+### Important Notes
+
+- The `vendor/` directory **must** be uploaded (this is critical and often forgotten)
+- Your `.env` file must have `APP_KEY` set (run `php artisan key:generate`)
+- Update paths in `public_html/index.php` after uploading
+- Set correct permissions on `storage/` and `bootstrap/cache/` directories (755 or 775)
+- For the "Please stand by while configuration is in progress" message, see TROUBLESHOOTING.md
+
 ## License
 
 This project is open-source software.

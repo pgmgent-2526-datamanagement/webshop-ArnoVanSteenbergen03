@@ -1,0 +1,127 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    # Some hosting providers require this for API authentication to work
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Handle X-XSRF-Token Header
+    # Required for CSRF token validation in AJAX requests
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # Redirect Trailing Slashes If Not A Folder
+    # This ensures consistent URL structure
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller
+    # This is the core of Laravel routing - all requests go through index.php
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Prevent access to .env file
+# SECURITY: Never allow direct access to .env file
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Prevent access to other sensitive files
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Optional: PHP configuration (uncomment if needed)
+# Some shared hosts require PHP settings to be set via .htaccess
+
+# PHP Memory Limit
+# php_value memory_limit 256M
+
+# PHP Upload Limits
+# php_value upload_max_filesize 64M
+# php_value post_max_size 64M
+
+# PHP Execution Time
+# php_value max_execution_time 300
+# php_value max_input_time 300
+
+# PHP Error Reporting (for production, keep errors off)
+# php_flag display_errors Off
+# php_flag log_errors On
+# php_value error_log /home/yourusername/laravel/storage/logs/php_errors.log
+
+# Disable directory browsing
+Options -Indexes
+
+# Security Headers (uncomment to enable)
+# <IfModule mod_headers.c>
+#     # Prevent clickjacking
+#     Header always set X-Frame-Options "SAMEORIGIN"
+#     
+#     # Prevent MIME type sniffing
+#     Header always set X-Content-Type-Options "nosniff"
+#     
+#     # Enable XSS protection
+#     Header always set X-XSS-Protection "1; mode=block"
+#     
+#     # Referrer Policy
+#     Header always set Referrer-Policy "strict-origin-when-cross-origin"
+# </IfModule>
+
+# Force HTTPS (uncomment if you have SSL certificate)
+# <IfModule mod_rewrite.c>
+#     RewriteCond %{HTTPS} off
+#     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# </IfModule>
+
+# Compress text files (if mod_deflate is available)
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# Browser Caching (improves performance)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Images
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    
+    # CSS and JavaScript
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    
+    # Fonts
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    
+    # Default
+    ExpiresDefault "access plus 1 week"
+</IfModule>
