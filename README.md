@@ -1,13 +1,3 @@
-ddev start (enkel voor db)
-php artisan serve (voor webserver)
-
-DB_CONNECTION="mariadb"
-DB_HOST="localhost"
-DB_PORT="8008"
-DB_DATABASE="db"
-DB_USERNAME="db"
-DB_PASSWORD="db"
-
 # Webshop Project
 
 A Laravel-based e-commerce webshop application with an admin panel powered by Filament.
