@@ -8,10 +8,16 @@ use App\Mail\OrderConfirmation;
 use App\Mail\AdminOrderNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Mollie\Api\MollieApiClient;
 
 class ShoppingCartController extends Controller
 {
+    private function getMollieClient()
+    {
+        $mollie = new \Mollie\Api\MollieApiClient();
+        $mollie->setApiKey(config('services.mollie.key'));
+        return $mollie;
+    }
+
     public function shoppingCart()
     {
         $cart = session()->get('cart', []);
@@ -162,9 +168,6 @@ class ShoppingCartController extends Controller
             }
         }
 
-        $mollie = new MollieApiClient();
-        $mollie->setApiKey(config('services.mollie.key'));
-
         $paymentData = [
             'amount' => [
                 'currency' => 'EUR',
@@ -186,7 +189,7 @@ class ShoppingCartController extends Controller
             $paymentData['webhookUrl'] = route('webhooks.mollie');
         }
 
-        $payment = $mollie->payments->create($paymentData);
+        $payment = $this->getMollieClient()->payments->create($paymentData);
 
         $order->update([
             'payment_id' => $payment->id,
@@ -204,10 +207,7 @@ class ShoppingCartController extends Controller
         $order = Order::with('orderItems.product')->findOrFail($orderId);
 
         if ($order->payment_id) {
-            $mollie = new MollieApiClient();
-            $mollie->setApiKey(config('services.mollie.key'));
-
-            $payment = $mollie->payments->get($order->payment_id);
+            $payment = $this->getMollieClient()->payments->get($order->payment_id);
 
             $order->update([
                 'payment_status' => $payment->status,
@@ -254,10 +254,7 @@ class ShoppingCartController extends Controller
             return response()->json(['error' => 'No payment ID provided'], 400);
         }
 
-        $mollie = new MollieApiClient();
-        $mollie->setApiKey(config('services.mollie.key'));
-
-        $payment = $mollie->payments->get($paymentId);
+        $payment = $this->getMollieClient()->payments->get($paymentId);
         $order = Order::where('payment_id', $paymentId)->first();
 
         if ($order) {
