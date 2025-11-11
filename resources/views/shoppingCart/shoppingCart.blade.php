@@ -1,24 +1,27 @@
 <x-layout>
-	<x-slot:seo>
-		<x-seo title="Shopping Cart" description="Review your selected LEGO sets and proceed to checkout. Your shopping cart with all selected items."/>
-	</x-slot:seo>
-	<div class="w-full max-w-7xl mx-auto px-4">
-		<h1 class="text-4xl font-bold text-blue-300 mb-6">Shopping Cart</h1>
+    <x-slot:seo>
+        <x-seo title="Shopping Cart"
+            description="Review your selected LEGO sets and proceed to checkout. Your shopping cart with all selected items." />
+    </x-slot:seo>
+    <div class="w-full max-w-7xl mx-auto px-4">
+        <h1 class="text-4xl font-bold text-blue-300 mb-6">Shopping Cart</h1>
 
-		@if(session('success'))
-            <div
-                class="bg-green-500/20 border border-green-500 text-green-100 px-4 py-3 rounded-lg mb-6">{{ session('success') }}
+        @if(session('success'))
+            <div class="bg-green-500/20 border border-green-500 text-green-100 px-4 py-3 rounded-lg mb-6">
+                {{ session('success') }}
             </div>
         @endif
 
-		@if(empty($cartItems))
+        @if(empty($cartItems))
             <div class="bg-white/10 backdrop-blur-lg rounded-xl shadow-xl p-12 text-center">
                 <svg class="w-24 h-24 mx-auto text-blue-300 mb-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 <h2 class="text-2xl font-semibold text-white mb-2">Your cart is empty</h2>
                 <p class="text-blue-200 mb-6">Start adding some LEGO sets to your cart!</p>
-                <a href="{{ route('webshop.list') }}" class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold px-8 py-3 rounded-lg border-2 border-white/30 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-white/60">
+                <a href="{{ route('webshop.list') }}"
+                    class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold px-8 py-3 rounded-lg border-2 border-white/30 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-white/60">
                     Continue Shopping
                 </a>
             </div>
@@ -27,10 +30,10 @@
                 <div class="lg:col-span-2 space-y-4">
                     @foreach($cartItems as $item)
                         <div class="bg-white rounded-lg shadow-md p-4 flex gap-4">
-                            <div
-                                class="w-24 h-24 bg-gray-50 rounded flex-shrink-0">
+                            <div class="w-24 h-24 bg-gray-50 rounded flex-shrink-0">
                                 @if($item['product']->image)
-                                    <img src="{{ asset($item['product']->image) }}" alt="{{ $item['product']->name }}" class="w-full h-full object-contain p-2">
+                                    <img src="{{ asset($item['product']->image) }}" alt="{{ $item['product']->name }}"
+                                        class="w-full h-full object-contain p-2">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-gray-400 text-xs">
                                         No Image
@@ -50,7 +53,8 @@
                                     @method('DELETE')
                                     <button type="submit" class="text-red-500 hover:text-red-700 transition-colors">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                         </svg>
                                     </button>
                                 </form>
@@ -59,7 +63,8 @@
                                     <form action="{{ route('cart.update', $item['product']->id) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="quantity" value="{{ $item['quantity'] - 1 }}">
-                                        <button type="submit" class="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center transition-colors">
+                                        <button type="submit"
+                                            class="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center transition-colors">
                                             <span class="text-gray-700 font-bold">-</span>
                                         </button>
                                     </form>
@@ -69,7 +74,8 @@
                                     <form action="{{ route('cart.update', $item['product']->id) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="quantity" value="{{ $item['quantity'] + 1 }}">
-                                        <button type="submit" class="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center transition-colors">
+                                        <button type="submit"
+                                            class="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center transition-colors">
                                             <span class="text-gray-700 font-bold">+</span>
                                         </button>
                                     </form>
@@ -85,7 +91,8 @@
 
                     <form action="{{ route('cart.clear') }}" method="POST" class="mt-4">
                         @csrf
-                        <button type="submit" class="text-red-500 hover:text-red-700 font-medium transition-colors" onclick="return confirm('Are you sure you want to clear your cart?')">
+                        <button type="submit" class="text-red-500 hover:text-red-700 font-medium transition-colors"
+                            onclick="return confirm('Are you sure you want to clear your cart?')">
                             Clear Cart
                         </button>
                     </form>
@@ -110,17 +117,18 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('cart.checkout') }}" class="block w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 rounded-lg border-2 border-white/30 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-white/60 mb-3 text-center">
+                        <a href="{{ route('cart.checkout') }}"
+                            class="block w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 rounded-lg border-2 border-white/30 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:border-white/60 mb-3 text-center">
                             Proceed to Checkout
                         </a>
 
-                        <a href="{{ route('webshop.list') }}" class="block text-center text-blue-200 hover:text-blue-100 transition-colors">
+                        <a href="{{ route('webshop.list') }}"
+                            class="block text-center text-blue-200 hover:text-blue-100 transition-colors">
                             Continue Shopping
                         </a>
                     </div>
                 </div>
             </div>
         @endif
-	</div>
+    </div>
 </x-layout>
-
